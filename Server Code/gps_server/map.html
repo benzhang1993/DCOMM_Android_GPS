@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 37.4219983, lng: -122.084},
+          zoom: 8
+        });
+        
+        setInterval(function(){ 
+          $.get("http://18.217.49.198:8080/hello", function(data, status) {
+          //alert("Data: " + data + "\nStatus: " + status);
+          mdata = JSON.parse(data);
+          for(let i = 0; i < mdata.length; i++) {
+            console.log('Location: ' + i + ' : ' + mdata[i]);
+            let thisdata = JSON.parse(mdata[i]);
+            let marker = new google.maps.Marker({position: {lat: parseFloat(thisdata["latitude"]), lng: parseFloat(thisdata["longitude"])}, map: map});
+          }
+        })
+        }, 3000);
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbbejICWOI5uhKzrnp-mL_waPjZzHB3_c&callback=initMap"
+    async defer></script>
+  </body>
+</html>
