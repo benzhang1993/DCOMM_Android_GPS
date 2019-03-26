@@ -1,3 +1,31 @@
+/*------------------------------------------------------------------------------------------------------------------
+--	SOURCE FILE:	TcpClient.java - The class for creating and handling a TCP connection with the server.
+--
+--
+--	PROGRAM:		GPS Tracker
+--
+--
+--	FUNCTIONS:		public TcpClient(OnMessageReceived listener)
+--					public void sendMessage(final String message)
+--					public void stopClient()
+--                  public void run()
+--                  public void messageReceived(String message)
+--
+--	DATE:			Mar 25, 2019
+--
+--
+--	REVISIONS:
+--
+--
+--	DESIGNER:		Jenny Ly, Jeffrey Choy, Ben Zhang
+--
+--
+--	PROGRAMMER:		Jenny Ly, Jeffrey Choy
+--
+--
+--	NOTES:
+--
+----------------------------------------------------------------------------------------------------------------------*/
 package ca.bcit.gpstracker;
 
 import android.util.Log;
@@ -25,18 +53,57 @@ public class TcpClient {
     // used to read messages from the server
     private BufferedReader mBufferIn;
 
-    /**
-     * Constructor of the class. OnMessagedReceived listens for the messages received from server
-     */
+    /*------------------------------------------------------------------------------------------------------------------
+    --	FUNCTION:		TcpClient
+    --
+    --
+    --	DATE:			March 25, 2019
+    --
+    --
+    --	REVISIONS:
+    --
+    --
+    --	DESIGNER:		Ben Zhang, Jenny Ly
+    --
+    --
+    --	PROGRAMMER:		Jenny Ly
+    --
+    --
+    --	INTERFACE:		public TcpClient(OnMessageReceived listener)
+    --
+    --	RETURNS:
+    --
+    --
+    --	NOTES:			Constructor of the class. OnMessagedReceived listens for the messages received from server
+    ----------------------------------------------------------------------------------------------------------------------*/
     public TcpClient(OnMessageReceived listener) {
         mMessageListener = listener;
     }
 
-    /**
-     * Sends the message entered by client to the server
-     *
-     * @param message text entered by client
-     */
+    /*------------------------------------------------------------------------------------------------------------------
+    --	FUNCTION:		sendMessage
+    --
+    --
+    --	DATE:			March 25, 2019
+    --
+    --
+    --	REVISIONS:
+    --
+    --
+    --	DESIGNER:		Ben Zhang, Jenny Ly
+    --
+    --
+    --	PROGRAMMER:		Jenny Ly
+    --
+    --
+    --	INTERFACE:		public void sendMessage(final String message)
+                            final String message to be sent to the server
+    --
+    --	RETURNS:
+    --
+    --
+    --	NOTES:			Sends the message entered by client to the server
+    ----------------------------------------------------------------------------------------------------------------------*/
     public void sendMessage(final String message) {
         Runnable runnable = new Runnable() {
             @Override
@@ -52,9 +119,29 @@ public class TcpClient {
         thread.start();
     }
 
-    /**
-     * Close the connection and release the members
-     */
+    /*------------------------------------------------------------------------------------------------------------------
+    --	FUNCTION:		stopClient
+    --
+    --
+    --	DATE:			March 25, 2019
+    --
+    --
+    --	REVISIONS:
+    --
+    --
+    --	DESIGNER:		Ben Zhang, Jenny Ly
+    --
+    --
+    --	PROGRAMMER:		Jenny Ly
+    --
+    --
+    --	INTERFACE:		public void stopClient()
+    --
+    --	RETURNS:
+    --
+    --
+    --	NOTES:			Close the connection and release the members
+    ----------------------------------------------------------------------------------------------------------------------*/
     public void stopClient() {
 
         mRun = false;
@@ -70,6 +157,30 @@ public class TcpClient {
         mServerMessage = null;
     }
 
+    /*------------------------------------------------------------------------------------------------------------------
+    --	FUNCTION:		run
+    --
+    --
+    --	DATE:			March 25, 2019
+    --
+    --
+    --	REVISIONS:
+    --
+    --
+    --	DESIGNER:		Ben Zhang, Jenny Ly
+    --
+    --
+    --	PROGRAMMER:		Jenny Ly
+    --
+    --
+    --	INTERFACE:		public void run()
+    --
+    --	RETURNS:
+    --
+    --
+    --	NOTES:			Creates the socket connection and assigns the input and output buffers. Listens
+    --                      for messages from the server and dispenses them to dummy function.
+    ----------------------------------------------------------------------------------------------------------------------*/
     public void run() {
 
         mRun = true;
@@ -120,8 +231,29 @@ public class TcpClient {
 
     }
 
-    //Declare the interface. The method messageReceived(String message) will must be implemented in the Activity
-    //class at on AsyncTask doInBackground
+    /*------------------------------------------------------------------------------------------------------------------
+    --	FUNCTION:		sendMessage
+    --
+    --
+    --	DATE:			March 25, 2019
+    --
+    --
+    --	REVISIONS:
+    --
+    --
+    --	DESIGNER:		Ben Zhang, Jenny Ly
+    --
+    --
+    --	PROGRAMMER:		Jenny Ly
+    --
+    --
+    --	INTERFACE:		public interface OnMessageReceived
+    --
+    --	RETURNS:
+    --
+    --
+    --	NOTES:			Dummy function to handle messages received from the server.
+    ----------------------------------------------------------------------------------------------------------------------*/
     public interface OnMessageReceived {
         public void messageReceived(String message);
     }
