@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         Button sendButton = (Button)findViewById(R.id.send_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                Toast toast = Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 0 ,0);
+                toast.show();
                 getDeviceLocation();
                 setLocationJSON();
                 EditText ipField = (EditText) findViewById(R.id.ip_field);
