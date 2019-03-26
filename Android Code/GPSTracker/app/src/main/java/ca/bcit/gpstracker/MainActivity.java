@@ -71,15 +71,24 @@ public class MainActivity extends AppCompatActivity {
         Button sendButton = (Button)findViewById(R.id.send_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Toast toast = Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 0 ,0);
-                toast.show();
+
                 getDeviceLocation();
                 setLocationJSON();
                 EditText ipField = (EditText) findViewById(R.id.ip_field);
                 EditText portField = (EditText) findViewById(R.id.port_field);
+                if (!checkConnectionDetails()) {
+                    Toast toast = Toast.makeText(MainActivity.this, "Invalid Connection Details", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0 ,5);
+                    toast.show();
+                    return;
+                }
+
                 myTcpClient.SERVER_IP = ipField.getText().toString();
                 myTcpClient.SERVER_PORT = Integer.parseInt(portField.getText().toString());
+
+                Toast toast = Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 0 ,0);
+                toast.show();
                 new ConnectTask().execute("");
                 new Timer().scheduleAtFixedRate(new TimerTask(){
                     @Override
@@ -119,5 +128,19 @@ public class MainActivity extends AppCompatActivity {
             locationJSON.put("longitude", longitude);
         }
         catch (JSONException e) {};
+    }
+
+    private boolean checkConnectionDetails() {
+        EditText ipField = (EditText) findViewById(R.id.ip_field);
+        EditText portField = (EditText) findViewById(R.id.port_field);
+        myTcpClient.SERVER_IP = ipField.getText().toString();
+        if(Integer.parseInt(portField.getText().toString()) != 3000) {
+            return false;
+        }
+        if (!ipField.getText().toString().equals("18.217.49.198")) {
+            return false;
+        }
+
+        return true;
     }
 }
