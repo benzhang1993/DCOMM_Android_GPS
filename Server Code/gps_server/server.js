@@ -1,19 +1,74 @@
+/*------------------------------------------------------------------------------------------------------------------
+--	SOURCE FILE:	server.js - The primary script file for the GPS tracking application's
+--												web server.
+--
+--
+--	PROGRAM:		GPS Tracker
+--
+--
+--	FUNCTIONS:		server.on('connection', function(sock))
+--								app.use(function(req, res, next))
+--								app.get("/hello", function(request, response))
+--
+--	DATE:			Mar 25, 2019
+--
+--
+--	REVISIONS:
+--
+--
+--	DESIGNER:		Ben Zhang, Kiaan Castillo
+--
+--
+--	PROGRAMMER:		Ben Zhang, Kiaan Castillo
+--
+--
+--	NOTES:
+--
+----------------------------------------------------------------------------------------------------------------------*/
+
 var net = require('net');
 
 const hostname = '0.0.0.0';
 const port = 3000;
 
+// create server
 var server = net.createServer(function(socket) {
 	socket.write('Echo server\r\n');
 	socket.pipe(socket);
 });
 
+// initiate listening on port
 server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
 
 let sockets = [];
 
+/*------------------------------------------------------------------------------------------------------------------
+--	FUNCTION:		server-on-connection
+--
+--
+--	DATE:			March 25, 2019
+--
+--
+--	REVISIONS:
+--
+--
+--	DESIGNER:		Ben Zhang, Kiaan Castillo
+--
+--
+--	PROGRAMMER:		Ben Zhang
+--
+--
+--	INTERFACE:		server.on('connection', function(sock))
+--
+--	RETURNS:
+--
+--
+--	NOTES:			Responsds to connection requests from remote client and creates a connection
+--								with the remote client and saves received data to a JSON file based
+--								on the sender
+----------------------------------------------------------------------------------------------------------------------*/
 server.on('connection', function(sock) {
     console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);
     sockets.push(sock);
@@ -54,6 +109,29 @@ var express = require("express");
 var myParser = require("body-parser");
 var app = express();
 
+/*------------------------------------------------------------------------------------------------------------------
+--	FUNCTION:		app-use
+--
+--
+--	DATE:			March 25, 2019
+--
+--
+--	REVISIONS:
+--
+--
+--	DESIGNER:		Ben Zhang, Kiaan Castillo
+--
+--
+--	PROGRAMMER:		Ben Zhang
+--
+--
+--	INTERFACE:		app.use(function(req, res, next))
+--
+--	RETURNS:
+--
+--
+--	NOTES:			Sets expected access control and content headers
+----------------------------------------------------------------------------------------------------------------------*/
 app.use(function(req, res, next) {
     myParser.urlencoded({extended : true});
     var allowedOrigins = ['http://18.217.49.198'];
@@ -68,6 +146,29 @@ app.use(function(req, res, next) {
     return next();
 });
 
+/*------------------------------------------------------------------------------------------------------------------
+--	FUNCTION:		app-get
+--
+--
+--	DATE:			March 25, 2019
+--
+--
+--	REVISIONS:
+--
+--
+--	DESIGNER:		Ben Zhang, Kiaan Castillo
+--
+--
+--	PROGRAMMER:		Ben Zhang, Kiaan Castillo
+--
+--
+--	INTERFACE:		app.get("/hello", function(request, response) )
+--
+--	RETURNS:
+--
+--
+--	NOTES:			Callback function to be executed when the server receives a GET request.
+----------------------------------------------------------------------------------------------------------------------*/
 app.get("/hello", function(request, response) {
     //console.log(request.params); /* This prints the  JSON document received (if it is a JSON document) */
 
